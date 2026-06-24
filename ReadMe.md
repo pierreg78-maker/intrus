@@ -1,0 +1,1 @@
+Jeu en html où il s'agit de trouver un mot intrus dans une liste d'autres mots.
