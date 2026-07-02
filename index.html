@@ -337,7 +337,7 @@ const QUESTIONS = [
   {theme:"Instruments de musique", mots:["piano","violon","flûte","marteau"], intrus:"marteau", explication:"Le marteau est un outil, pas un instrument de musique."},
   {theme:"Instruments à cordes", mots:["guitare","harpe","violoncelle","trompette","mandoline","luth"], intrus:"trompette", explication:"La trompette est un instrument à vent, pas à cordes."},
   {theme:"Instruments à vent", mots:["flûte","hautbois","clarinette","batterie","cor","tuba"], intrus:"batterie", explication:"La batterie est un instrument à percussion."},
-  {theme:"Instruments de musique", mots:["accordéon","orgue","tambour","xylophone","saxophone","caisse claire","trombone","cymbale"], intrus:"accordéon", explication:"L'accordéon est un instrument à anche libre, les autres sont à vent ou percussion."},
+  {theme:"Instruments de musique", mots:["accordéon","trompette","tambour","xylophone","flûte","caisse claire","trombone","cymbale"], intrus:"accordéon", explication:"L'accordéon est un instrument à vent à anche libre, les autres sont des instruments de percussion ou à vent et sans anche."},
 
   // --- MÉTIERS ---
   {theme:"Métiers de la santé", mots:["médecin","infirmière","pharmacien","plombier"], intrus:"plombier", explication:"Le plombier est un artisan, pas un soignant."},
@@ -451,7 +451,7 @@ function nouvelleQuestion() {
   // Zone question
   const zq = document.getElementById('zone-question');
   zq.className = 'zone-question';
-  zq.innerHTML = `<span class="theme-label">Thème : ${q.theme}</span>Quel mot ne va pas avec les autres ?`;
+  zq.innerHTML = `<span class="theme-label">Indice ou Thème : ${q.theme}</span>Liste`;
 
   // Grille mots
   const grille = document.getElementById('grille-mots');
