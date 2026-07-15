@@ -251,8 +251,30 @@
   <h1>L'intrus</h1>
 </header>
 
-<div class="conteneur">
+  <div class="zone-question attente" id="zone-question">
+    Choisissez le niveau de difficulté, puis commencez une partie.
+  </div>
+ 
+  <div class="niveau-row">
+    <label for="niveau">Difficulté (Nombre de mots) :</label>
+    <select id="niveau">
+      <option value="4">Facile (4 mots)</option>
+      <option value="6" selected>Moyen (6 mots)</option>
+      <option value="8">Difficile (8 mots)</option>
+    </select>
+  </div>
+  
+ <button class="btn-nouveau" id="btn-nouveau" onclick="nouvelleQuestion()">Commencer une partie</button>
 
+ <div class="conteneur">
+
+  <div class="grille-mots" id="grille-mots"></div>
+
+  <div class="zone-feedback" id="zone-feedback"></div>
+
+  <button class="btn-valider" id="btn-valider" disabled onclick="valider()">Valider ma réponse</button>
+ </div>
+ 
   <div class="score-bar">
     <div class="score-item">
       <span class="score-label">Score</span>
@@ -268,28 +290,8 @@
     </div>
   </div>
 
-  <div class="niveau-row">
-    <label for="niveau">Nombre de mots :</label>
-    <select id="niveau">
-      <option value="4">4 mots (facile)</option>
-      <option value="6" selected>6 mots (moyen)</option>
-      <option value="8">8 mots (difficile)</option>
-    </select>
-  </div>
 
-  <div class="zone-question attente" id="zone-question">
-    Choisissez une difficulté, puis lancez une question.
-  </div>
-
-  <div class="grille-mots" id="grille-mots"></div>
-
-  <div class="zone-feedback" id="zone-feedback"></div>
-
-  <button class="btn-valider" id="btn-valider" disabled onclick="valider()">Valider ma réponse</button>
-  <button class="btn-nouveau" id="btn-nouveau" onclick="nouvelleQuestion()">Commencer une partie</button>
-
-</div>
-
+ 
 <footer>Jeu sans besoin de connexion internet · Atelier Mémoire</footer>
 
 <script>
@@ -312,7 +314,7 @@ const QUESTIONS = [
   {theme:"Fruits rouges", mots:["fraise","cerise","framboise","kiwi"], intrus:"kiwi", explication:"Le kiwi est un fruit vert, pas un fruit rouge."},
   {theme:"Agrumes", mots:["citron","orange","pamplemousse","raisin","mandarine","banane"], intrus:"banane", explication:"La banane n'est pas un agrume."},
   {theme:"Fruits exotiques", mots:["mangue","ananas","papaye","pomme","litchi","noix de coco"], intrus:"pomme", explication:"La pomme est un fruit tempéré, pas exotique."},
-  {theme:"Fruits à noyau", mots:["pêche","abricot","prune","cerise","fraise","nectarine","mangue","kiwi"], intrus:"kiwi", explication:"Le kiwi n'a pas de noyau."},
+  {theme:"Fruits à noyau", mots:["pêche","abricot","prune","cerise","datte","nectarine","mangue","kiwi"], intrus:"kiwi", explication:"Le kiwi n'a pas de noyau."},
   {theme:"Fruits", mots:["melon","pastèque","figue","tomate"], intrus:"tomate", explication:"Botaniquement fruit mais culinairement légume — la tomate se mange en plat salé."},
 
   // --- LÉGUMES ---
