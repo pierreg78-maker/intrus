@@ -263,6 +263,32 @@
   footer { margin-top:14px; }
   @media(max-width:390px) { header{padding-inline:67px}.conteneur{padding-inline:9px}.niveau-row{gap:7px}.btn-niveau{font-size:12px}.grille-mots{gap:7px}.btn-mot{min-height:52px;font-size:16px} }
   @media(max-width:310px) { .niveau-row{grid-template-columns:1fr}.grille-mots{grid-template-columns:1fr} }
+
+  /* Typographie plus douce, sans dépendance à Internet */
+  body {
+    font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;
+  }
+  header h1 {
+    color:#132a46;
+    font-family:Comfortaa,"Arial Rounded MT Bold","Avenir Next Rounded","Trebuchet MS",sans-serif;
+    font-weight:700;
+    letter-spacing:-.025em;
+  }
+  .consigne,
+  .btn-niveau,
+  .btn-indice,
+  .btn-valider,
+  .btn-nouveau,
+  .score-label,
+  .score-val,
+  .zone-feedback,
+  footer {
+    font-family:"Trebuchet MS","Segoe UI",Arial,sans-serif;
+  }
+  .btn-mot {
+    font-family:"Arial Rounded MT Bold","Avenir Next Rounded","Trebuchet MS",sans-serif;
+    letter-spacing:.01em;
+  }
 </style>
 </head>
 <body>
