@@ -238,6 +238,31 @@
   @media (max-width:390px) { header{min-height:82px;padding-top:25px}.conteneur{padding:18px 12px 0}.niveau-row{padding:14px;margin-bottom:14px}.grille-mots{gap:9px}.btn-mot{min-height:58px;padding:12px 7px}.score-bar{margin-top:22px;padding-inline:8px} }
   @media (max-width:320px) { .grille-mots{grid-template-columns:1fr} }
   @media (prefers-reduced-motion:reduce) { *,*::before,*::after{transition:none!important} }
+
+  /* Organisation inspirée de la maquette */
+  header { background:#fff; color:#18a94d; box-shadow:none; min-height:58px; padding:15px 70px 8px; }
+  header h1 { font-family:Arial,sans-serif; font-size:25px; }
+  .conteneur { width:100%; max-width:520px; padding:0 14px 22px; }
+  .consigne { order:1; margin:0 4px 14px; color:#777; font-size:15px; font-weight:700; line-height:1.35; text-align:center; }
+  .niveau-row { order:2; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:0 0 20px; padding:0; background:transparent; border:0; box-shadow:none; }
+  .btn-niveau { min-height:52px; padding:8px 4px; border:0; border-radius:13px; color:#1d1d1d; font:800 14px/1.2 Arial,sans-serif; cursor:pointer; box-shadow:0 4px 0 rgba(0,0,0,.16); }
+  .btn-niveau[data-niveau="4"] { background:#ffe400; }
+  .btn-niveau[data-niveau="6"] { background:#ff922e; }
+  .btn-niveau[data-niveau="8"] { background:#ff3b3f; }
+  .btn-niveau.actif { outline:3px solid #2072a8; outline-offset:3px; }
+  .grille-mots { order:3; padding:8px; margin:0 0 14px; background:#eeeae1; gap:9px; }
+  .btn-mot { min-height:56px; padding:12px 7px; border:1.5px solid #c9c2b5; border-radius:10px; box-shadow:0 2px 0 #c9c2b5; font-family:Georgia,serif; font-weight:400; }
+  .zone-question { order:4; margin:0 0 9px; padding:8px; border:0; background:transparent; }
+  .zone-question.attente { display:none; }
+  .btn-indice { min-height:40px; border:0; background:transparent; color:#707070; font-size:15px; }
+  .indice-contenu { color:#8a5b42; text-transform:uppercase; letter-spacing:.12em; font-size:12px; }
+  .zone-feedback { order:5; }
+  .btn-valider { order:6; min-height:52px; margin-bottom:10px; background:#176b4d; box-shadow:0 4px 0 #0e4f39; }
+  .btn-nouveau { order:7; min-height:46px; }
+  .score-bar { order:8; width:100%; margin:28px 0 0; border-radius:0; }
+  footer { margin-top:14px; }
+  @media(max-width:390px) { header{padding-inline:67px}.conteneur{padding-inline:9px}.niveau-row{gap:7px}.btn-niveau{font-size:12px}.grille-mots{gap:7px}.btn-mot{min-height:52px;font-size:16px} }
+  @media(max-width:310px) { .niveau-row{grid-template-columns:1fr}.grille-mots{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -251,30 +276,25 @@
   <h1>L'intrus</h1>
 </header>
 
-  <div class="zone-question attente" id="zone-question">
-    Choisissez le niveau de difficulté, puis commencez une partie.
-  </div>
- 
-  <div class="niveau-row">
-    <label for="niveau">Difficulté (Nombre de mots) :</label>
-    <select id="niveau">
-      <option value="4">Facile (4 mots)</option>
-      <option value="6" selected>Moyen (6 mots)</option>
-      <option value="8">Difficile (8 mots)</option>
-    </select>
-  </div>
-  
- <button class="btn-nouveau" id="btn-nouveau" onclick="nouvelleQuestion()">Commencer une partie</button>
+ <main class="conteneur">
+  <p class="consigne">Appuyez sur l’un des boutons ci-dessous pour générer une liste de mots où s’est glissé un intrus.</p>
 
- <div class="conteneur">
+  <input id="niveau" type="hidden" value="6">
+  <div class="niveau-row" aria-label="Choisir la difficulté">
+    <button class="btn-niveau" data-niveau="4" onclick="choisirNiveau(4)">4 mots<br>(facile)</button>
+    <button class="btn-niveau actif" data-niveau="6" onclick="choisirNiveau(6)">6 mots<br>(moyen)</button>
+    <button class="btn-niveau" data-niveau="8" onclick="choisirNiveau(8)">8 mots<br>(difficile)</button>
+  </div>
 
   <div class="grille-mots" id="grille-mots"></div>
+
+  <div class="zone-question attente" id="zone-question"></div>
 
   <div class="zone-feedback" id="zone-feedback"></div>
 
   <button class="btn-valider" id="btn-valider" disabled onclick="valider()">Valider ma réponse</button>
- </div>
- 
+  <button class="btn-nouveau" id="btn-nouveau" onclick="nouvelleQuestion()">Nouvelle question</button>
+
   <div class="score-bar">
     <div class="score-item">
       <span class="score-label">Score</span>
@@ -289,9 +309,8 @@
       <span class="score-val" id="pct-val">—</span>
     </div>
   </div>
+</main>
 
-
- 
 <footer>Jeu sans besoin de connexion internet · Atelier Mémoire</footer>
 
 <script>
@@ -443,6 +462,8 @@ let intrusIndex = null;
 let mots = [];
 let enCours = false;
 let questionsUtilisees = [];
+let questionActive = null;
+const positionsRestantes = {};
 
 function melanger(arr) {
   const a = [...arr];
@@ -451,6 +472,21 @@ function melanger(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
+}
+
+function choisirNiveau(nb) {
+  document.getElementById('niveau').value = nb;
+  document.querySelectorAll('.btn-niveau').forEach(btn => {
+    btn.classList.toggle('actif', Number(btn.dataset.niveau) === nb);
+  });
+  nouvelleQuestion();
+}
+
+function prochainePosition(nb) {
+  if (!positionsRestantes[nb] || positionsRestantes[nb].length === 0) {
+    positionsRestantes[nb] = melanger(Array.from({length:nb}, (_, i) => i));
+  }
+  return positionsRestantes[nb].pop();
 }
 
 function nouvelleQuestion() {
@@ -464,17 +500,19 @@ function nouvelleQuestion() {
   }
 
   // Filtre par nombre de mots compatible
-  const compatibles = disponibles.filter(q => q.mots.length >= nb);
-  const pool = compatibles.length > 0 ? compatibles : disponibles;
+  const compatibles = disponibles.filter(q => q.mots.length === nb);
+  const pool = compatibles.length > 0 ? compatibles : QUESTIONS.filter(q => q.mots.length === nb);
   const idx = QUESTIONS.indexOf(pool[Math.floor(Math.random() * pool.length)]);
   questionsUtilisees.push(idx);
   const q = QUESTIONS[idx];
+  questionActive = q;
 
   // Sélectionne nb mots dont l'intrus
   let motsBase = q.mots.filter(m => m !== q.intrus);
   motsBase = melanger(motsBase).slice(0, nb - 1);
-  mots = melanger([...motsBase, q.intrus]);
-  intrusIndex = mots.indexOf(q.intrus);
+  mots = melanger(motsBase);
+  intrusIndex = prochainePosition(nb);
+  mots.splice(intrusIndex, 0, q.intrus);
 
   motChoisi = null;
   enCours = true;
@@ -527,7 +565,7 @@ function valider() {
   btns.forEach(b => b.disabled = true);
 
   const fb = document.getElementById('zone-feedback');
-  const q = QUESTIONS.find(q => q.intrus === mots[intrusIndex]);
+  const q = questionActive;
 
   if (motChoisi === intrusIndex) {
     score++;
